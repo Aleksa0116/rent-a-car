@@ -11,10 +11,9 @@ export default function ContactAndLocation() {
     <section id="contact" className="section-padding bg-[var(--color-surface-raised)]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          label="Kontakt i lokacija"
-          title="Dostupni smo kad vam je"
-          titleHighlight="najpotrebnije"
-          description="Pronađite nas u centru Beograda ili kontaktirajte putem telefona i WhatsApp-a — odgovaramo u roku od 30 minuta."
+          title="Pronađite nas"
+          titleHighlight="u Beogradu"
+          description="Centar Beograda, aerodrom i dostava na adresu. Odgovaramo u roku od 30 minuta."
           align="center"
         />
 

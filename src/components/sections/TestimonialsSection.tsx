@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Star, Quote, BadgeCheck } from "lucide-react";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import { testimonials } from "@/data/testimonials";
 import { cn } from "@/lib/utils";
 
@@ -10,12 +9,44 @@ export default function TestimonialsSection() {
   return (
     <section id="testimonials" className="section-padding bg-[var(--color-surface-raised)]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
-        <SectionHeader
-          label="Recenzije"
-          title="Šta Kažu"
-          titleHighlight="Naši Klijenti"
-          description="Više od 2,400 zadovoljnih korisnika delilo je svoja iskustva. Transparentno, nepristrasno."
-        />
+        {/* ── Rating-centric header ─────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center gap-4 text-center"
+        >
+          {/* Rating row */}
+          <div className="flex items-center gap-4">
+            <span className="text-[4.5rem] font-black leading-none tracking-tighter text-zinc-900">
+              4.8
+            </span>
+            <div className="flex flex-col items-start gap-1.5">
+              <div className="flex gap-0.5">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star
+                    key={i}
+                    className={cn(
+                      "h-5 w-5",
+                      i <= 4
+                        ? "fill-amber-400 text-amber-400"
+                        : "fill-amber-200 text-amber-200"
+                    )}
+                  />
+                ))}
+              </div>
+              <p className="text-sm font-medium text-zinc-500">
+                od <span className="font-bold text-zinc-700">2,400+</span> recenzija
+              </p>
+            </div>
+          </div>
+
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl">
+            Šta kažu naši{" "}
+            <span className="gradient-text">klijenti</span>
+          </h2>
+        </motion.div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((t, i) => (

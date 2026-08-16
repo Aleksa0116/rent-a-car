@@ -22,10 +22,9 @@ export default function FaqSection() {
     <section id="faq" className="section-padding">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-12">
         <SectionHeader
-          label="FAQ"
-          title="Česta"
-          titleHighlight="Pitanja"
-          description="Sve što trebate znati o iznajmljivanju vozila — odgovoreno jasno i direktno."
+          title="Imate pitanje?"
+          titleHighlight="Odgovaramo."
+          align="left"
         />
 
         {/* Category Tabs */}

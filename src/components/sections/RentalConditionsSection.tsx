@@ -65,10 +65,10 @@ export default function RentalConditionsSection() {
     <section className="section-padding bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
         <SectionHeader
-          label="Uslovi najma"
-          title="Transparentni"
-          titleHighlight="uslovi"
-          description="Sve što trebate znati pre iznajmljivanja. Nema iznenađenja — samo jasna pravila."
+          title="Sve što trebate znati"
+          titleHighlight="pre iznajmljivanja"
+          description="Jasna pravila, bez skrivenih troškova i iznenađenja."
+          align="left"
         />
 
         {/* Two-column grid on md+, single column on mobile */}

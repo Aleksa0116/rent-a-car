@@ -14,6 +14,7 @@ import { generateWhatsAppLink } from "@/lib/whatsapp";
 import { pickupLocations } from "@/lib/config";
 import type { Car, BookingDetails } from "@/lib/types";
 import { DateRangePicker, formatDateShort } from "@/components/ui/DateRangePicker";
+import { PremiumSelect } from "@/components/ui/PremiumSelect";
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -385,22 +386,17 @@ export function BookingModal({ car, open, onClose }: BookingModalProps) {
                       <SectionHeader icon={<MapPin className="h-4 w-4" />} label="Lokacija preuzimanja" />
 
                       <FieldWrapper label="Gde preuzimate vozilo?" required error={errors.locationId}>
-                        <div className="relative">
-                          <select
-                            value={form.locationId}
-                            onChange={(e) => setField("locationId", e.target.value)}
-                            className={cn(inputCls(!!errors.locationId), "pr-10 appearance-none cursor-pointer")}
-                          >
-                            <option value="">Izaberi lokaciju…</option>
-                            {pickupLocations.map((loc) => (
-                              <option key={loc.name} value={loc.name}>
-                                {loc.isAirport ? "✈ " : loc.name === "Dostava na adresu" ? "🏠 " : "📍 "}
-                                {loc.name}
-                              </option>
-                            ))}
-                          </select>
-                          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                        </div>
+                        <PremiumSelect
+                          value={form.locationId}
+                          onValueChange={(v) => setField("locationId", v)}
+                          placeholder="Izaberi lokaciju…"
+                          icon={<MapPin className="h-4 w-4" />}
+                          options={pickupLocations.map((loc) => ({
+                            value: loc.name,
+                            label: `${loc.isAirport ? "✈  " : loc.name === "Dostava na adresu" ? "🏠  " : "📍  "}${loc.name}`,
+                          }))}
+                          className={errors.locationId ? "border-red-300 focus:border-red-400 ring-2 ring-red-100" : ""}
+                        />
                       </FieldWrapper>
 
                       <AnimatePresence>
