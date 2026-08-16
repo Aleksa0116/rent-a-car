@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote, BadgeCheck } from "lucide-react";
+import { Star, Quote, BadgeCheck, Car } from "lucide-react";
 import { testimonials } from "@/data/testimonials";
 import { cn } from "@/lib/utils";
 
@@ -80,9 +80,11 @@ export default function TestimonialsSection() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
               className={cn(
-                "relative flex flex-col gap-4 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-card)] p-6",
-                "transition-all duration-200 hover:border-[color-mix(in_srgb,var(--color-brand-500)_25%,var(--color-surface-border))] hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]",
-                i === 1 && "lg:scale-[1.02] border-[color-mix(in_srgb,var(--color-brand-500)_20%,var(--color-surface-border))]"
+                "relative flex flex-col gap-4 rounded-2xl border bg-[var(--color-surface-card)] p-6",
+                "transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]",
+                i === 1
+                  ? "border-blue-200 shadow-[0_0_0_1px_rgba(37,99,235,0.1),var(--shadow-card)] hover:border-blue-300"
+                  : "border-[var(--color-surface-border)] shadow-[var(--shadow-card)] hover:border-[color-mix(in_srgb,var(--color-brand-500)_25%,var(--color-surface-border))]"
               )}
             >
               {/* Quote icon */}
@@ -108,7 +110,7 @@ export default function TestimonialsSection() {
 
               {/* Car rented badge */}
               <div className="flex items-center gap-2 rounded-xl bg-[var(--color-surface-raised)] px-3 py-2">
-                <span className="text-base">🚗</span>
+                <Car className="h-3.5 w-3.5 shrink-0 text-[var(--color-brand-400)]" />
                 <span className="text-xs font-medium text-[var(--color-text-muted)]">
                   {t.carRented}
                 </span>

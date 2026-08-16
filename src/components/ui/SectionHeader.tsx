@@ -67,14 +67,23 @@ export function SectionHeader({
       className={cn("flex flex-col gap-4", alignClass, className)}
     >
       {label && (
-        <span className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-1.5 shadow-[0_0_0_1.5px_rgba(99,102,241,0.22),inset_0_1px_0_rgba(255,255,255,0.85)]">
-          {/* Gradient accent dot */}
-          <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 shadow-[0_0_5px_rgba(99,102,241,0.55)]" />
-          {/* Gradient text */}
-          <span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-[11px] font-bold uppercase tracking-[0.18em] text-transparent">
-            {label}
+        align === "center" ? (
+          /* ── Centered variant: text above, fading rule below ── */
+          <span className="flex flex-col items-center gap-2">
+            <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-blue-600/75">
+              {label}
+            </span>
+            <span className="h-px w-10 bg-gradient-to-r from-blue-500/0 via-blue-500 to-indigo-500/0" />
           </span>
-        </span>
+        ) : (
+          /* ── Left variant: gradient rule then text ── */
+          <span className="flex items-center gap-3">
+            <span className="h-px w-7 flex-shrink-0 bg-gradient-to-r from-blue-500 to-indigo-400" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-blue-600/75">
+              {label}
+            </span>
+          </span>
+        )
       )}
       <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
         {title}{" "}

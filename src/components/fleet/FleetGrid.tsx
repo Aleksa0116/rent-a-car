@@ -70,13 +70,15 @@ export function FleetGrid({ cars, onBookNow, isLoading = false }: FleetGridProps
   return (
     <>
       <div className="space-y-8">
-        {/* Filter bar */}
-        <FleetFilter
-          filters={filters}
-          onChange={setFilters}
-          totalResults={filteredCars.length}
-          totalCars={cars.length}
-        />
+        {/* Sticky filter bar — stays visible while browsing the fleet */}
+        <div className="sticky top-[63px] z-30 -mx-4 bg-white/95 px-4 pb-4 pt-3 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 [box-shadow:0_1px_0_0_var(--color-surface-border),0_4px_16px_-4px_rgba(0,0,0,0.06)]">
+          <FleetFilter
+            filters={filters}
+            onChange={setFilters}
+            totalResults={filteredCars.length}
+            totalCars={cars.length}
+          />
+        </div>
 
         {/* Grid / Empty state */}
         <AnimatePresence mode="wait">

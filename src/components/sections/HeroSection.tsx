@@ -11,6 +11,7 @@ import {
   Plane,
   BadgeCheck,
 } from "lucide-react";
+import { Fragment } from "react";
 import { Button } from "@/components/ui/Button";
 import { openGenericWhatsApp } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
@@ -104,36 +105,37 @@ export default function HeroSection() {
                 </button>
               </motion.div>
 
-              {/* Trust proof points — each pill enters individually */}
-              <div className="flex flex-wrap gap-2.5">
-                {TRUST_ITEMS.map((item, i) => (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, y: 14, scale: 0.92 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{
-                      duration: 0.48,
-                      delay: 0.36 + i * 0.1,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className="relative flex items-center gap-2.5 overflow-hidden rounded-2xl border border-white/12 bg-white/6 px-4 py-2.5 backdrop-blur-md"
-                  >
-                    {/* Glass rim highlight */}
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                    />
-                    {/* Icon badge */}
-                    <span className="flex h-[1.625rem] w-[1.625rem] shrink-0 items-center justify-center rounded-lg bg-blue-400/20 text-blue-300">
-                      {item.icon}
-                    </span>
-                    {/* Label */}
-                    <span className="text-[12px] font-semibold leading-none text-white/85">
-                      {item.label}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
+              {/* Trust proof points — clean row, no pills */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.34, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col gap-3"
+              >
+                {/* Thin editorial separator */}
+                <span className="w-12 h-px bg-white/25" />
+
+                {/* Items row */}
+                <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-0">
+                  {TRUST_ITEMS.map((item, i) => (
+                    <Fragment key={item.label}>
+                      <div className="flex items-center gap-2.5 shrink-0">
+                        {/* Small icon in subtle tinted circle */}
+                        <span className="flex h-[1.375rem] w-[1.375rem] shrink-0 items-center justify-center rounded-md bg-blue-400/20 text-blue-300">
+                          {item.icon}
+                        </span>
+                        <span className="text-[13px] font-medium text-white/72 leading-none">
+                          {item.label}
+                        </span>
+                      </div>
+                      {/* Vertical separator — visible only on sm+ */}
+                      {i < TRUST_ITEMS.length - 1 && (
+                        <span className="hidden sm:block mx-5 h-3.5 w-px bg-white/20 shrink-0" />
+                      )}
+                    </Fragment>
+                  ))}
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>

@@ -95,7 +95,7 @@ export default function QuickSearch() {
            */}
           <button
             type="button"
-            className="[flex:2] flex flex-col lg:flex-row focus:outline-none"
+            className="lg:[flex:2] flex flex-col focus:outline-none lg:flex-row"
           >
             {/* Pickup sub-field */}
             <div className="group flex flex-1 cursor-pointer items-start gap-3 px-5 py-4 transition-colors hover:bg-[var(--color-surface-hover)] border-b border-[var(--color-surface-border)] lg:border-b-0 lg:border-r">
@@ -151,12 +151,12 @@ export default function QuickSearch() {
         </QuickField>
 
         {/* CTA */}
-        <div className="flex items-stretch p-3 lg:p-2.5">
+        <div className="p-3 lg:flex lg:items-stretch lg:p-2.5">
           <button
             onClick={handleSearch}
             className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-[var(--color-brand-500)] px-6 py-4 text-sm font-bold text-white shadow-[0_4px_16px_-4px_rgba(30,64,175,0.45)] transition-all hover:bg-[var(--color-brand-400)] hover:shadow-[0_6px_22px_-4px_rgba(30,64,175,0.55)] active:scale-[0.98] lg:h-full lg:min-w-[160px] lg:flex-col lg:gap-1.5 lg:px-8"
           >
-            <Search className="h-4 w-4 shrink-0 lg:h-5 lg:w-5" />
+            <Search className="h-5 w-5 shrink-0" />
             <span className="whitespace-nowrap">Pronađi vozilo</span>
           </button>
         </div>
