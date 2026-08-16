@@ -5,20 +5,35 @@ import { Star, Quote, BadgeCheck } from "lucide-react";
 import { testimonials } from "@/data/testimonials";
 import { cn } from "@/lib/utils";
 
+// ─── Card entrance directions ───────────────────────────────────────────────
+// Cards "gather" from three directions: left col slides from left, middle rises
+// from below, right col slides from right. Creates a sense of convergence.
+function cardInitial(index: number) {
+  const col = index % 3;
+  if (col === 0) return { opacity: 0, x: -40, y: 16 };
+  if (col === 2) return { opacity: 0, x:  40, y: 16 };
+  return         { opacity: 0, y: 52 };
+}
+
 export default function TestimonialsSection() {
   return (
     <section id="testimonials" className="section-padding bg-[var(--color-surface-raised)]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
+
         {/* ── Rating-centric header ─────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center gap-4 text-center"
-        >
-          {/* Rating row */}
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col items-center gap-4 text-center">
+
+          {/* Big rating number — spring "pop" so it feels alive */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.55 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{
+              duration: 0.7,
+              ease: [0.34, 1.56, 0.64, 1], // overshoot spring
+            }}
+            className="flex items-center gap-4"
+          >
             <span className="text-[4.5rem] font-black leading-none tracking-tighter text-zinc-900">
               4.8
             </span>
@@ -40,22 +55,30 @@ export default function TestimonialsSection() {
                 od <span className="font-bold text-zinc-700">2,400+</span> recenzija
               </p>
             </div>
-          </div>
+          </motion.div>
 
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl">
+          {/* Title slides up after the rating has "landed" */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.55, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl"
+          >
             Šta kažu naši{" "}
             <span className="gradient-text">klijenti</span>
-          </h2>
-        </motion.div>
+          </motion.h2>
+        </div>
 
+        {/* ── Cards ────────────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((t, i) => (
             <motion.article
               key={t.id}
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={cardInitial(i)}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.6, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
               className={cn(
                 "relative flex flex-col gap-4 rounded-2xl border border-[var(--color-surface-border)] bg-[var(--color-surface-card)] p-6",
                 "transition-all duration-200 hover:border-[color-mix(in_srgb,var(--color-brand-500)_25%,var(--color-surface-border))] hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]",
@@ -70,9 +93,9 @@ export default function TestimonialsSection() {
 
               {/* Stars */}
               <div className="flex gap-0.5">
-                {Array.from({ length: t.rating }).map((_, i) => (
+                {Array.from({ length: t.rating }).map((_, j) => (
                   <Star
-                    key={i}
+                    key={j}
                     className="h-4 w-4 fill-[var(--color-brand-400)] text-[var(--color-brand-400)]"
                   />
                 ))}

@@ -49,6 +49,7 @@ export default function HowItWorksSection() {
           title="Rezervacija za"
           titleHighlight="60 Sekundi"
           description="Jednostavan proces u 4 koraka. Bez birokratije, bez čekanja — samo brza i pouzdana usluga."
+          animationVariant="slide-left"
         />
 
         {/* ── Desktop: flex row + chevron connectors ──────────────────────────── */}
@@ -94,12 +95,12 @@ interface StepProps {
 function StepCard({ step, index }: StepProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 36 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{
-        duration: 0.55,
-        delay: index * 0.09,
+        duration: 0.6,
+        delay: index * 0.1,
         ease: [0.16, 1, 0.3, 1],
       }}
       className={[

@@ -104,23 +104,36 @@ export default function HeroSection() {
                 </button>
               </motion.div>
 
-              {/* Trust proof points */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.34 }}
-                className="flex flex-wrap gap-2.5"
-              >
-                {TRUST_ITEMS.map((item) => (
-                  <div
+              {/* Trust proof points — each pill enters individually */}
+              <div className="flex flex-wrap gap-2.5">
+                {TRUST_ITEMS.map((item, i) => (
+                  <motion.div
                     key={item.label}
-                    className="flex items-center gap-2 rounded-xl border border-white/15 bg-black/20 px-3.5 py-2 text-[11px] font-medium text-white/80 backdrop-blur-sm"
+                    initial={{ opacity: 0, y: 14, scale: 0.92 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{
+                      duration: 0.48,
+                      delay: 0.36 + i * 0.1,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="relative flex items-center gap-2.5 overflow-hidden rounded-2xl border border-white/12 bg-white/6 px-4 py-2.5 backdrop-blur-md"
                   >
-                    <span className="text-blue-300">{item.icon}</span>
-                    {item.label}
-                  </div>
+                    {/* Glass rim highlight */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                    />
+                    {/* Icon badge */}
+                    <span className="flex h-[1.625rem] w-[1.625rem] shrink-0 items-center justify-center rounded-lg bg-blue-400/20 text-blue-300">
+                      {item.icon}
+                    </span>
+                    {/* Label */}
+                    <span className="text-[12px] font-semibold leading-none text-white/85">
+                      {item.label}
+                    </span>
+                  </motion.div>
                 ))}
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>

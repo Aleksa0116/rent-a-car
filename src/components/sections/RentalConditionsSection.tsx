@@ -69,6 +69,7 @@ export default function RentalConditionsSection() {
           titleHighlight="pre iznajmljivanja"
           description="Jasna pravila, bez skrivenih troškova i iznenađenja."
           align="left"
+          animationVariant="slide-left"
         />
 
         {/* Two-column grid on md+, single column on mobile */}
@@ -80,10 +81,10 @@ export default function RentalConditionsSection() {
             return (
               <motion.div
                 key={condition.id}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.35, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.4, delay: i * 0.045, ease: [0.16, 1, 0.3, 1] }}
                 className={cn(
                   "border-b border-[var(--color-surface-border)]",
                   /* last in each column — remove border on the very last item */

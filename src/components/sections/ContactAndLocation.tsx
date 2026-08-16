@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Phone, MessageCircle, Mail, MapPin, Clock } from "lucide-react";
+import { Phone, MessageCircle, Mail, MapPin, Clock, ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { siteConfig } from "@/lib/config";
 import { openGenericWhatsApp } from "@/lib/whatsapp";
@@ -30,17 +30,25 @@ export default function ContactAndLocation() {
             {/* Primary phone CTA */}
             <a
               href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-              className="group flex items-center gap-4 rounded-2xl bg-[var(--color-brand-500)] p-5 text-white shadow-[0_4px_24px_-6px_rgba(30,64,175,0.4)] transition-all hover:bg-[var(--color-brand-400)] hover:shadow-[0_6px_28px_-6px_rgba(30,64,175,0.5)] active:scale-[0.98]"
+              className="group relative flex items-center gap-4 overflow-hidden rounded-2xl bg-blue-600 p-5 shadow-[0_8px_32px_-8px_rgba(37,99,235,0.5)] transition-all hover:bg-blue-500 hover:shadow-[0_12px_40px_-8px_rgba(37,99,235,0.65)] active:scale-[0.98]"
             >
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15">
+              {/* Glass sheen on top edge */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent"
+              />
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white">
                 <Phone className="h-6 w-6" />
               </span>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-widest text-white/70">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-widest text-white/60">
                   Pozovite odmah
                 </p>
-                <p className="text-xl font-bold tracking-tight">{siteConfig.phone}</p>
+                <p className="text-xl font-bold tracking-tight text-white">
+                  {siteConfig.phone}
+                </p>
               </div>
+              <ChevronRight className="h-5 w-5 shrink-0 text-white/40 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-white/70" />
             </a>
 
             {/* Secondary — WhatsApp */}

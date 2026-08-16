@@ -47,10 +47,10 @@ export default function CtaSection() {
       <div className="relative mx-auto max-w-4xl space-y-10 px-4 text-center sm:px-6 lg:px-8">
 
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="space-y-5"
         >
           {/* Eyebrow pill */}

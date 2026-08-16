@@ -35,6 +35,7 @@ export default function FleetSection() {
             title="Izaberite Vaše"
             titleHighlight="Savršeno Vozilo"
             description="Od ekonomičnih gradskih automobila do luksuznih SUV-ova — naša flota pokriva svaku prigodu i budžet."
+            animationVariant="scale"
           />
 
           {/* Animated stats strip */}
