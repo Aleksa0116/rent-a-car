@@ -105,11 +105,11 @@ function StepCard({ step, index }: StepProps) {
       }}
       className={[
         /* Layout */
-        "group relative flex flex-1 flex-col overflow-hidden",
+        "group relative flex flex-1 flex-col",
         /* Shape */
         "rounded-2xl border border-zinc-100 bg-white",
         /* Spacing */
-        "px-6 pb-10 pt-6",
+        "px-6 pb-8 pt-6",
         /* Shadow */
         "shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)]",
         /* Hover lift */
@@ -117,44 +117,32 @@ function StepCard({ step, index }: StepProps) {
         "hover:-translate-y-2 hover:shadow-[0_20px_56px_-16px_rgba(0,0,0,0.13)]",
       ].join(" ")}
     >
-      {/*
-       * ── Watermark number ──────────────────────────────────────────────────
-       * Huge, ultra-light background text that gives each card its identity
-       * without competing with the content. Shifts to a faint blue tint on
-       * hover so the card "warms up" subtly.
-       */}
-      <span
-        aria-hidden
-        className={[
-          "pointer-events-none select-none",
-          "absolute -bottom-3 -right-1",
-          "text-[6.5rem] font-black leading-none",
-          "text-zinc-100",
-          "transition-colors duration-300 group-hover:text-blue-50",
-        ].join(" ")}
-      >
-        {step.num}
-      </span>
+      {/* ── Header row: icon left, step number right ── */}
+      <div className="mb-5 flex items-start justify-between gap-2">
 
-      {/*
-       * ── Icon ──────────────────────────────────────────────────────────────
-       * Blue rounded square that scales slightly on card hover.
-       * A subtle top-highlight gradient adds dimension without gradients.
-       */}
-      <div
-        className={[
-          "relative mb-5 inline-flex h-[3.25rem] w-[3.25rem] shrink-0",
-          "items-center justify-center rounded-xl",
-          "bg-blue-600 text-white",
-          "transition-all duration-300",
-          "group-hover:scale-[1.07]",
-          "group-hover:shadow-[0_8px_24px_-4px_rgba(37,99,235,0.55)]",
-        ].join(" ")}
-        style={{ boxShadow: "0 4px 16px -4px rgba(37,99,235,0.42)" }}
-      >
-        {step.icon}
-        {/* Gloss highlight */}
-        <span className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-b from-white/20 to-transparent" />
+        {/* Blue icon block */}
+        <div
+          className={[
+            "relative inline-flex h-[3.25rem] w-[3.25rem] shrink-0",
+            "items-center justify-center rounded-xl",
+            "bg-blue-600 text-white",
+            "transition-all duration-300",
+            "group-hover:scale-[1.07]",
+            "group-hover:shadow-[0_8px_24px_-4px_rgba(37,99,235,0.55)]",
+          ].join(" ")}
+          style={{ boxShadow: "0 4px 16px -4px rgba(37,99,235,0.42)" }}
+        >
+          {step.icon}
+          <span className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-b from-white/20 to-transparent" />
+        </div>
+
+        {/* Step number — top right, in normal flow, never overlaps */}
+        <span
+          aria-hidden
+          className="select-none text-[2.75rem] font-black leading-none tracking-tight text-zinc-100 transition-colors duration-300 group-hover:text-blue-100"
+        >
+          {step.num}
+        </span>
       </div>
 
       {/* Step label */}
