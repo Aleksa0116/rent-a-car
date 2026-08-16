@@ -97,6 +97,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Clamp width to the viewport on every browser, including iOS Safari */
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   body {
@@ -105,7 +108,9 @@
     font-family: var(--font-sans);
     font-size: var(--font-size-md);
     line-height: 1.6;
+    /* Both html + body needed: iOS WebKit ignores overflow-x on body alone */
     overflow-x: hidden;
+    max-width: 100%;
   }
 
   /* Scrollbar — minimal, light */
