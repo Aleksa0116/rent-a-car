@@ -23,6 +23,13 @@ export function SmoothScrollProvider({
       touchMultiplier: 1.5,
     });
 
+    // Allow any modal/overlay to pause and resume smooth scroll by dispatching
+    // custom DOM events. This is decoupled — no shared state or context needed.
+    const handleStop  = () => lenis.stop();
+    const handleStart = () => lenis.start();
+    document.addEventListener("lenis:stop",  handleStop);
+    document.addEventListener("lenis:start", handleStart);
+
     let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
@@ -31,6 +38,8 @@ export function SmoothScrollProvider({
     rafId = requestAnimationFrame(raf);
 
     return () => {
+      document.removeEventListener("lenis:stop",  handleStop);
+      document.removeEventListener("lenis:start", handleStart);
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };

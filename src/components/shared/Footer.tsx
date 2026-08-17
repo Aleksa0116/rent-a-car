@@ -162,6 +162,17 @@ export default function Footer() {
               Uslovi korišćenja
             </Link>
           </div>
+          <p className="text-xs text-white/25">
+            Dizajn i razvoj:{" "}
+            <Link
+              href="https://www.alerak.studio"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-white/70"
+            >
+              AleRak Studio
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

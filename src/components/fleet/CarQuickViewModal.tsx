@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import * as Dialog from "@radix-ui/react-dialog";
 import { motion, AnimatePresence } from "framer-motion";
@@ -64,6 +64,12 @@ interface CarQuickViewModalProps {
 export function CarQuickViewModal({ car, open, onClose, onBookNow }: CarQuickViewModalProps) {
   const [activeImg, setActiveImg]   = useState(0);
   const [imgLoaded, setImgLoaded]   = useState(false);
+
+  // Pause Lenis while the quick-view is open so the page doesn't scroll behind the overlay.
+  useEffect(() => {
+    document.dispatchEvent(new Event(open ? "lenis:stop" : "lenis:start"));
+    return () => { document.dispatchEvent(new Event("lenis:start")); };
+  }, [open]);
 
   if (!car) return null;
 
@@ -185,7 +191,7 @@ export function CarQuickViewModal({ car, open, onClose, onBookNow }: CarQuickVie
                 </div>
 
                 {/* ── Scrollable Content ─────────────────────────────────── */}
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto" data-lenis-prevent>
                   <div className="p-5 sm:p-6 space-y-6">
 
                     {/* Title + Rating + Price */}

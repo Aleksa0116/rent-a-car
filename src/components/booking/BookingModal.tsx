@@ -82,6 +82,13 @@ export function BookingModal({ car, open, onClose }: BookingModalProps) {
     if (open) { setForm(EMPTY_FORM); setErrors({}); setStatus("idle"); }
   }, [open, car?.id]);
 
+  // Pause Lenis smooth scroll while modal is open so the page
+  // doesn't scroll behind the overlay when the user scrolls the form.
+  useEffect(() => {
+    document.dispatchEvent(new Event(open ? "lenis:stop" : "lenis:start"));
+    return () => { document.dispatchEvent(new Event("lenis:start")); };
+  }, [open]);
+
   // ── Derived ────────────────────────────────────────────────────────────────
 
   const days      = getRentalDays(form.pickupDate ?? null, form.returnDate ?? null);
@@ -286,7 +293,7 @@ export function BookingModal({ car, open, onClose }: BookingModalProps) {
                 </div>
 
                 {/* ── Scrollable form ─────────────────────────────────────── */}
-                <div className="flex-1 overflow-y-auto px-5 pb-2">
+                <div className="flex-1 overflow-y-auto px-5 pb-2" data-lenis-prevent>
                   <form
                     id={formId}
                     onSubmit={(e) => { e.preventDefault(); void handleSubmit(); }}
