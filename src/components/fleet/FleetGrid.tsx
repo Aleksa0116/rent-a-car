@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PackageSearch } from "lucide-react";
 import { CarCard } from "./CarCard";
@@ -23,6 +23,20 @@ interface FleetGridProps {
 export function FleetGrid({ cars, onBookNow, isLoading = false }: FleetGridProps) {
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTER_STATE);
   const [detailCar, setDetailCar] = useState<Car | null>(null);
+
+  // Detect when the filter bar is "stuck" to the navbar
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [isStuck, setIsStuck] = useState(false);
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsStuck(!entry!.isIntersecting),
+      { threshold: 1.0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     function handleQuickSearch(e: Event) {
@@ -70,8 +84,22 @@ export function FleetGrid({ cars, onBookNow, isLoading = false }: FleetGridProps
   return (
     <>
       <div className="space-y-8">
-        {/* Sticky filter bar — stays visible while browsing the fleet */}
-        <div className="sticky top-[63px] z-30 -mx-4 bg-white/95 px-4 pb-4 pt-3 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 [box-shadow:0_1px_0_0_var(--color-surface-border),0_4px_16px_-4px_rgba(0,0,0,0.06)]">
+
+        {/* Sentinel — 1px invisible element; when it scrolls out of view
+            the filter is "stuck" and we switch to the card appearance    */}
+        <div ref={sentinelRef} className="-mt-1 h-px" aria-hidden />
+
+        {/* Sticky filter bar */}
+        <div
+          className={[
+            "sticky top-16 lg:top-[72px] z-30 transition-all duration-300",
+            isStuck
+              // Stuck → floating card: rounded, white, shadow
+              ? "rounded-2xl border border-zinc-100 bg-white/95 px-5 py-4 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12),0_2px_10px_-4px_rgba(0,0,0,0.07)] backdrop-blur-sm"
+              // Not stuck → seamlessly blends with the section background
+              : "pb-4",
+          ].join(" ")}
+        >
           <FleetFilter
             filters={filters}
             onChange={setFilters}

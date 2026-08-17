@@ -84,10 +84,10 @@ export function FleetFilter({ filters, onChange, totalResults, totalCars }: Flee
             value={filters.searchQuery}
             onChange={(e) => set("searchQuery", e.target.value)}
             className={cn(
-              "h-11 w-full rounded-xl border border-zinc-200 bg-white",
+              "h-11 w-full rounded-xl border border-zinc-150 bg-white",
               "pl-10 pr-9 text-sm text-zinc-900 placeholder:text-zinc-400",
               "outline-none transition-all",
-              "focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              "focus:border-blue-400 focus:ring-2 focus:ring-blue-50"
             )}
           />
           <AnimatePresence>
@@ -149,7 +149,7 @@ export function FleetFilter({ filters, onChange, totalResults, totalCars }: Flee
                 "transition-colors duration-150 select-none",
                 isActive
                   ? "text-white"
-                  : "border border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:text-zinc-800"
+                  : "border border-zinc-100 bg-white text-zinc-600 hover:border-zinc-200 hover:text-zinc-800"
               )}
             >
               {isActive && (

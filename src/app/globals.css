@@ -97,8 +97,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    /* Clamp width to the viewport on every browser, including iOS Safari */
-    overflow-x: hidden;
+    /* clip clips overflow without creating a scroll container,
+       so position:sticky still works (unlike overflow-x:hidden) */
+    overflow-x: clip;
     max-width: 100%;
   }
 
@@ -108,8 +109,9 @@
     font-family: var(--font-sans);
     font-size: var(--font-size-md);
     line-height: 1.6;
-    /* Both html + body needed: iOS WebKit ignores overflow-x on body alone */
-    overflow-x: hidden;
+    /* Same: clip on body prevents horizontal scroll on iOS without
+       creating a stacking context that breaks sticky children */
+    overflow-x: clip;
     max-width: 100%;
   }
 
