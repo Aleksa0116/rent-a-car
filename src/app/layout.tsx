@@ -6,6 +6,7 @@ import { siteConfig } from "@/lib/config";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import WhatsAppFAB from "@/components/shared/WhatsAppFAB";
+import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -179,10 +180,12 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-white text-[#18181b] antialiased">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <WhatsAppFAB />
+        <SmoothScrollProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+          <WhatsAppFAB />
+        </SmoothScrollProvider>
       </body>
     </html>
   );

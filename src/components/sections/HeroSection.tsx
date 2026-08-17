@@ -1,8 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useReducedMotion,
+  type MotionValue,
+} from "framer-motion";
 import {
   ChevronRight,
   ChevronDown,
@@ -11,7 +17,6 @@ import {
   Plane,
   BadgeCheck,
 } from "lucide-react";
-import { Fragment } from "react";
 import { Button } from "@/components/ui/Button";
 import { openGenericWhatsApp } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
@@ -29,18 +34,37 @@ const TRUST_ITEMS = [
 
 /* ─── Component ──────────────────────────────────────────────────────────────── */
 export default function HeroSection() {
-  return (
-    <section className="relative h-[100svh] min-h-[640px] overflow-hidden">
+  const prefersReduced = useReducedMotion();
 
-      {/* ── Full-bleed background photo ────────────────────────────────────── */}
-      {/*
-       * Dark blur placeholder sits beneath the real image.
-       * It is visible on initial paint (especially on slow connections) and
-       * fades out once the Image's onLoad fires.
-       * The same dark-slate tone as the darkest gradient overlays ensures
-       * text legibility is maintained even before the photo arrives.
-       */}
-      <HeroBgImage src={HERO_IMAGE} />
+  // Mouse parallax — raw values → smoothed springs
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springX = useSpring(rawX, { stiffness: 40, damping: 22, mass: 0.8 });
+  const springY = useSpring(rawY, { stiffness: 40, damping: 22, mass: 0.8 });
+
+  function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
+    if (prefersReduced) return;
+    const { left, top, width, height } =
+      e.currentTarget.getBoundingClientRect();
+    // Normalize to ‑1…+1, invert for parallax, scale to ±12 px
+    rawX.set(((e.clientX - left) / width  - 0.5) * -24);
+    rawY.set(((e.clientY - top)  / height - 0.5) * -24);
+  }
+
+  function handleMouseLeave() {
+    rawX.set(0);
+    rawY.set(0);
+  }
+
+  return (
+    <section
+      className="relative h-[100svh] min-h-[640px] overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+
+      {/* ── Full-bleed background photo with mouse parallax ────────────────── */}
+      <HeroBgImage src={HERO_IMAGE} x={springX} y={springY} />
 
       {/* ── Gradient overlays ─────────────────────────────────────────────── */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/15" />
@@ -161,15 +185,25 @@ export default function HeroSection() {
 }
 
 /* ─── HeroBgImage ────────────────────────────────────────────────────────────
- * Renders the hero background with a dark blur-up crossfade.
- * Keeps the parent component as a single-concern layout component.
+ * Renders the hero background with:
+ *  • Dark blur-up crossfade on load
+ *  • Mouse-driven parallax (image moves opposite to cursor, ~12 px max)
+ *    scale(1.1) ensures no edges are ever exposed during movement.
  */
-function HeroBgImage({ src }: { src: string }) {
+function HeroBgImage({
+  src,
+  x,
+  y,
+}: {
+  src: string;
+  x: MotionValue<number>;
+  y: MotionValue<number>;
+}) {
   const [loaded, setLoaded] = useState(false);
 
   return (
     <>
-      {/* Dark placeholder — visible until the photo is decoded */}
+      {/* Dark blur placeholder — fades out once the real image loads */}
       <div
         aria-hidden
         className={cn(
@@ -180,20 +214,26 @@ function HeroBgImage({ src }: { src: string }) {
         )}
       />
 
-      <Image
-        src={src}
-        alt="Luksuzni automobil u Beogradu — AleRak Rent-a-Car"
-        fill
-        priority
-        sizes="100vw"
-        quality={85}
-        onLoad={() => setLoaded(true)}
-        className={cn(
-          "object-cover object-[55%_65%]",
-          "transition-opacity duration-700 ease-out",
-          loaded ? "opacity-100" : "opacity-0"
-        )}
-      />
+      {/* Parallax layer — slightly oversized so edges stay hidden during movement */}
+      <motion.div
+        className="absolute inset-0"
+        style={{ x, y, scale: 1.1 }}
+      >
+        <Image
+          src={src}
+          alt="Luksuzni automobil u Beogradu — AleRak Rent-a-Car"
+          fill
+          priority
+          sizes="100vw"
+          quality={85}
+          onLoad={() => setLoaded(true)}
+          className={cn(
+            "object-cover object-[55%_65%]",
+            "transition-opacity duration-700 ease-out",
+            loaded ? "opacity-100" : "opacity-0"
+          )}
+        />
+      </motion.div>
     </>
   );
 }
