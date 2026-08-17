@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -55,6 +55,62 @@ export default function HeroSection() {
     rawX.set(0);
     rawY.set(0);
   }
+
+  // ─── Gyroscope parallax (mobile) ─────────────────────────────────────────────
+  // Uses the same rawX/rawY motion values as mouse parallax, so spring physics
+  // automatically smooth out gyroscope jitter.
+  //
+  // gamma = left/right tilt (−90 … +90°, centre = 0)
+  // beta  = front/back tilt (0 … 180°, typical portrait ≈ 65–80°)
+  useEffect(() => {
+    if (prefersReduced || typeof window === "undefined") return;
+    // Skip on non-touch (desktop) devices
+    if (!window.matchMedia("(pointer: coarse)").matches) return;
+
+    const GAMMA_SCALE  = 22;  // degrees → maps ±22° tilt to full ±PX_RANGE
+    const BETA_CENTER  = 72;  // typical portrait viewing angle
+    const BETA_SCALE   = 18;  // degrees of range above/below centre
+    const PX_RANGE     = 14;  // max image displacement in px
+
+    function handleOrientation(e: DeviceOrientationEvent) {
+      const g = e.gamma ?? 0;
+      const b = e.beta  ?? BETA_CENTER;
+      rawX.set(Math.max(-1, Math.min(1, g / GAMMA_SCALE)) * -PX_RANGE);
+      rawY.set(Math.max(-1, Math.min(1, (b - BETA_CENTER) / BETA_SCALE)) * -PX_RANGE);
+    }
+
+    // iOS 13+ requires requestPermission(), called from a user gesture.
+    // We piggyback on the first touchstart — transparent to the user.
+    type DoePerm = typeof DeviceOrientationEvent & {
+      requestPermission?: () => Promise<"granted" | "denied">;
+    };
+    const Doe = DeviceOrientationEvent as DoePerm;
+
+    if (typeof Doe.requestPermission === "function") {
+      let cleanup: (() => void) | undefined;
+      const onFirstTouch = () => {
+        Doe.requestPermission!()
+          .then((state) => {
+            if (state === "granted") {
+              window.addEventListener("deviceorientation", handleOrientation, { passive: true });
+              cleanup = () => window.removeEventListener("deviceorientation", handleOrientation);
+            }
+          })
+          .catch(() => {});
+      };
+      window.addEventListener("touchstart", onFirstTouch, { once: true });
+      return () => {
+        window.removeEventListener("touchstart", onFirstTouch);
+        cleanup?.();
+      };
+    }
+
+    // Android + older browsers — add listener directly
+    window.addEventListener("deviceorientation", handleOrientation, { passive: true });
+    return () => window.removeEventListener("deviceorientation", handleOrientation);
+  // rawX / rawY are stable MotionValue refs — same as useRef, safe to omit from deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefersReduced]);
 
   return (
     <section

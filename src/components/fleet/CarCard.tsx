@@ -93,9 +93,15 @@ export function CarCard({ car, index = 0, onBookNow, onDetails }: CarCardProps) 
         </div>
       </div>
 
-      {/* ── Image — always starts at same Y; badges overlaid so they never ─── */}
-      {/* affect layout                                                         */}
-      <div className="relative mt-2 h-44 w-full overflow-hidden">
+      {/* ── Image — clickable for quick-view, badges overlaid ─────────────── */}
+      <div
+        className="relative mt-2 h-44 w-full cursor-pointer overflow-hidden"
+        onClick={() => onDetails?.(car)}
+        role="button"
+        tabIndex={0}
+        aria-label={`Pogledaj detalje — ${car.name}`}
+        onKeyDown={(e) => e.key === "Enter" && onDetails?.(car)}
+      >
 
         {!imgError ? (
           <>
@@ -191,18 +197,18 @@ export function CarCard({ car, index = 0, onBookNow, onDetails }: CarCardProps) 
 
           {/* Transmission: letter badge + label */}
           <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-slate-600 text-[11px] font-bold text-white">
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-[11px] font-bold text-zinc-600">
               {transmissionLetter}
             </span>
-            <span className="text-sm text-slate-600">{transmissionLabel}</span>
+            <span className="text-sm text-zinc-500">{transmissionLabel}</span>
           </div>
 
           <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-zinc-200" />
 
           {/* Fuel: icon + label */}
           <div className="flex items-center gap-1.5">
-            <Fuel className="h-4 w-4 shrink-0 text-slate-400" />
-            <span className="text-sm text-slate-600">{fuelLabel}</span>
+            <Fuel className="h-4 w-4 shrink-0 text-zinc-400" />
+            <span className="text-sm text-zinc-500">{fuelLabel}</span>
           </div>
         </div>
 
@@ -212,11 +218,11 @@ export function CarCard({ car, index = 0, onBookNow, onDetails }: CarCardProps) 
           {/* Price */}
           <div className="min-w-0">
             <div className="flex items-baseline gap-0.5 leading-none">
-              <span className="text-xs font-bold text-blue-600">od&nbsp;</span>
-              <span className="text-xl font-extrabold text-blue-600">
+              <span className="text-xs font-medium text-zinc-400">od&nbsp;</span>
+              <span className="text-xl font-extrabold text-zinc-900">
                 {formatCurrency(car.pricing.daily, car.pricing.currency)}
               </span>
-              <span className="text-xs font-bold text-blue-600">/dan</span>
+              <span className="text-[11px] font-semibold text-blue-600/70">/dan</span>
             </div>
             <p className="mt-0.5 text-[11px] text-zinc-400">
               Depozit {formatCurrency(car.pricing.deposit, car.pricing.currency)}
@@ -230,12 +236,12 @@ export function CarCard({ car, index = 0, onBookNow, onDetails }: CarCardProps) 
               onClick={() => onBookNow?.(car)}
               className={cn(
                 "flex shrink-0 items-center gap-2 rounded-lg",
-                "bg-blue-600 px-5 py-2.5",
+                "bg-zinc-900 px-5 py-2.5",
                 "text-sm font-bold uppercase tracking-wide text-white",
-                "transition-colors duration-200 hover:bg-blue-700 active:scale-[0.97]"
+                "transition-colors duration-200 hover:bg-zinc-800 active:scale-[0.97]"
               )}
             >
-              <MessageCircle className="h-3.5 w-3.5 shrink-0" />
+              <MessageCircle className="h-3.5 w-3.5 shrink-0 text-[#25D366]" />
               Izaberi
             </button>
           ) : (
@@ -254,17 +260,6 @@ export function CarCard({ car, index = 0, onBookNow, onDetails }: CarCardProps) 
             </button>
           )}
         </div>
-
-        {/* Tertiary — details link */}
-        {onDetails && (
-          <button
-            type="button"
-            onClick={() => onDetails(car)}
-            className="mt-2.5 text-center text-[11px] font-semibold text-zinc-400 transition-colors hover:text-blue-600"
-          >
-            Pogledaj detalje →
-          </button>
-        )}
       </div>
     </motion.article>
   );

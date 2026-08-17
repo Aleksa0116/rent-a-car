@@ -72,9 +72,32 @@ export default function WhatsAppFAB() {
             className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_8px_32px_-4px_rgba(37,211,102,0.5)] transition-shadow hover:shadow-[0_8px_40px_-4px_rgba(37,211,102,0.7)]"
             aria-label={`Kontakt putem WhatsApp — ${siteConfig.phone}`}
           >
-            {/* Pulse ring */}
-            <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" />
-            <MessageCircle className="h-6 w-6 relative z-10" />
+            {/* Outer pulse ring — slower, pauses between beats */}
+            <motion.span
+              aria-hidden
+              className="absolute inset-0 rounded-full bg-[#25D366]"
+              animate={{ scale: [1, 1.75], opacity: [0.38, 0] }}
+              transition={{
+                duration: 1.3,
+                repeat: Infinity,
+                repeatDelay: 2.7,
+                ease: "easeOut",
+              }}
+            />
+            {/* Inner pulse ring — slight delay for layered effect */}
+            <motion.span
+              aria-hidden
+              className="absolute inset-0 rounded-full bg-[#25D366]"
+              animate={{ scale: [1, 1.4], opacity: [0.25, 0] }}
+              transition={{
+                duration: 1.3,
+                repeat: Infinity,
+                repeatDelay: 2.7,
+                delay: 0.25,
+                ease: "easeOut",
+              }}
+            />
+            <MessageCircle className="relative z-10 h-6 w-6" />
           </motion.button>
         </motion.div>
       )}
