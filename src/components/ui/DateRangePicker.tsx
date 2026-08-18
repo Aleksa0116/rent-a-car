@@ -66,12 +66,31 @@ export function DateRangeCalendar({
   const days =
     from && to ? Math.ceil((to.getTime() - from.getTime()) / 86_400_000) : 0;
 
+  /*
+   * react-day-picker v10 sets `{ from, to: from }` on the first click
+   * (a 1-day range). That made us auto-close before the user could pick
+   * a return date. We track the step ourselves:
+   *   1st click → pickup only, calendar stays open
+   *   2nd click → return date, then close
+   */
+  const [pickingEnd, setPickingEnd] = useState(!!from && !to);
+
   const handleSelect = (range: DateRange | undefined) => {
-    onRangeChange(range?.from, range?.to);
-    /* Auto-close once both dates are chosen */
-    if (range?.from && range?.to) {
-      setTimeout(() => onClose?.(), 240);
+    if (!range?.from) {
+      onRangeChange(undefined, undefined);
+      setPickingEnd(false);
+      return;
     }
+
+    if (!pickingEnd) {
+      onRangeChange(range.from, undefined);
+      setPickingEnd(true);
+      return;
+    }
+
+    const end = range.to ?? range.from;
+    onRangeChange(range.from, end);
+    setPickingEnd(false);
   };
 
   const canApply = !!(from && to);
@@ -82,6 +101,7 @@ export function DateRangeCalendar({
         mode="range"
         selected={{ from, to }}
         onSelect={handleSelect}
+        resetOnSelect
         disabled={{ before: min }}
         numberOfMonths={numMonths}
         defaultMonth={from ?? min}
@@ -149,7 +169,10 @@ export function DateRangeCalendar({
       <div className="mt-1 flex items-center justify-between border-t border-zinc-100 px-4 py-3">
         <button
           type="button"
-          onClick={() => onRangeChange(undefined, undefined)}
+          onClick={() => {
+            onRangeChange(undefined, undefined);
+            setPickingEnd(false);
+          }}
           disabled={!from && !to}
           className="text-sm text-slate-400 hover:text-slate-600 disabled:cursor-default disabled:opacity-30 transition-colors"
         >
@@ -174,7 +197,8 @@ export function DateRangeCalendar({
 
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => { if (canApply) onClose?.(); }}
+            disabled={!canApply}
             className={cn(
               "rounded-lg px-4 py-1.5 text-sm font-semibold transition-all duration-150",
               canApply
